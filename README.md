@@ -15,7 +15,8 @@
 |---|---|
 | Job type | Sarkari (government) · Private · Berozgaar (unemployed) |
 | Position | 24 roles — IAS, PCS, Lekhpal, Patwari, babu, fauji, bijli vibhag, FAANG SDE, CA, property dealer, coaching teacher, gym trainer and more |
-| Skin tone | Gora / Sanwla / Kariya — the "rate" moves ±10%, and the verdict tells you exactly whose fault that is |
+| Skin tone | Gora / Saanwla / Vishuddh kariya — the "rate" moves ±10%, and the verdict tells you exactly whose fault that is |
+| Height | Lamba +6% / normal / nata −8%, because apparently that's a line item too |
 | Add-ons | IIT/NIT tag +10% · own house +8% · foreign posting +12% · car +5% |
 
 Then a fake "AI analysis" runs (*"Consulting with Bua ji…"*, *"Loading Pandit ji v2.0…"*) and you get:
@@ -26,7 +27,7 @@ Then a fake "AI analysis" runs (*"Consulting with Bua ji…"*, *"Loading Pandit 
 - **Wedding stats** — baraatis, rishtas per week, kilos of mithai, and whether you get a Bluetooth speaker or a DJ with a ghodi
 - a randomly generated biodata line (*"Ladka non-smoker, non-drinker, non-cooking, non-cleaning."*)
 
-Pick *Berozgaar* and you get `404 — Dahej not found`.
+Pick *Berozgaar* and you get `404 — Dahej not found`. Score low enough and the whole thing flips to `WAITING` — *"Filhaal koi ladki available nahi hai. Aap waiting list mein 47th number pe hain."* — which is where the joke turns around and tells you to skip the whole market instead.
 
 The result is capped between ₹15 lakh and ₹1 crore, because that's apparently the market.
 

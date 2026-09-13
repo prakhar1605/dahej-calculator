@@ -68,7 +68,9 @@
   @keyframes pop{ from{ transform:scale(.92); opacity:0 } to{ transform:scale(1); opacity:1 } }
   .amount{ font-family:'Yatra One',cursive; font-size:clamp(40px,10vw,64px); color:var(--maroon); line-height:1 }
   .rupee{ font-size:.55em; vertical-align:top; color:var(--gold) }
+  .amount.waiting{ font-size:clamp(30px,8vw,46px); letter-spacing:3px }
   .grade{ display:inline-block; margin-top:10px; background:var(--leaf); color:#fff; padding:4px 14px; border-radius:20px; font-weight:800; font-size:14px }
+  .grade.warn{ background:var(--maroon) }
   .verdict{ margin-top:14px; font-size:16px; line-height:1.5; color:var(--ink) }
   .breakup{ margin-top:16px; text-align:left; font-size:14px; background:#fff; border:2px solid #efd9a8; border-radius:6px; padding:12px 14px }
   .breakup div{ display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px dotted #e6cfa0 }
@@ -110,11 +112,18 @@
   <label for="pos">Kaun si position?</label>
   <select id="pos"><option value="">Pehle upar naukri select karo</option></select>
 
-  <label for="looks">Shakal-surat (Bua ji ka favourite sawaal)</label>
+  <label for="looks">Ladke ka rang (Bua ji ka favourite sawaal)</label>
   <select id="looks">
     <option value="gora">Gora — Fair &amp; Lovely ka ad lagte ho</option>
-    <option value="wheatish" selected>Sanwla — biodata mein "wheatish" likha hai</option>
-    <option value="kariya">Kariya — photo Snapseed se bhi nahi sudhri</option>
+    <option value="wheatish" selected>Saanwla — biodata mein "wheatish" likha hai</option>
+    <option value="kariya">Vishuddh kariya — photo Snapseed se bhi nahi sudhri</option>
+  </select>
+
+  <label for="height">Ladke ki height</label>
+  <select id="height">
+    <option value="lamba">Lamba ladka — 6 feet, sherwani pe sab fit</option>
+    <option value="normal" selected>Theek-thaak — 5'7", chal jayega</option>
+    <option value="nata">Nata ladka — shaadi ki photo mein ladki heels nahi pehnegi</option>
   </select>
 
   <label>Add-ons (Rishtedaar yeh sab pooch hi lenge)</label>
@@ -191,9 +200,22 @@ const EXTRAS = [
 ];
 const LOOKS = {
   gora:     ["Gora", 0.10,  "Rang gora hai toh 10% upar. Logic? Koi nahi. Bua ji ka rule hai."],
-  wheatish: ["Sanwla", 0,   "Sanwla = neutral. Biodata mein 'wheatish' likhna mat bhoolna."],
-  kariya:   ["Kariya", -0.10, "Rishtedaar 10% kaat rahe hain. Ghatiya rishtedaar hain, tum nahi. Rang nahi, soch kaali hai unki."],
+  wheatish: ["Saanwla", 0,   "Saanwla = neutral. Biodata mein 'wheatish' likhna mat bhoolna."],
+  kariya:   ["Vishuddh kariya", -0.10, "Rishtedaar 10% kaat rahe hain. Ghatiya rishtedaar hain, tum nahi. Rang nahi, soch kaali hai unki."],
 };
+const HEIGHTS = {
+  lamba:  ["Lamba ladka", 0.06, "6 feet ka bonus alag se lag gaya — sirf isliye ki sherwani achhi lagti hai."],
+  normal: ["Theek-thaak height", 0, ""],
+  nata:   ["Nata ladka", -0.08, "Height pe 8% kaat gaya. Ladki heels chhod degi par rishtedaar apni soch nahi chhodenge."],
+};
+// Sabse neeche wale slab ke liye — waiting list wale dialogues.
+const WAITING = [
+  "Filhaal koi ladki available nahi hai. Aap waiting list mein 47th number pe hain.",
+  "Apna khud khoj lo, paise dekar. Hamara data ab kaam nahi aayega.",
+  "Bhai tum shaadi mat karo. Paisa bachao, sukoon bachao, aur jeeyo.",
+  "System keh raha hai: 'Try again after 2 promotions.'",
+  "Rishta nahi mil raha? Achhi baat hai. Jo log rate poochte hain, unse rishta banta bhi kya hai.",
+];
 const AI_LINES = [
   "Rishtedaaron ka WhatsApp group scan ho raha hai…",
   "Bua ji ke saath consultation chal rahi hai…",
@@ -250,6 +272,8 @@ function calc() {
   const row = RATES[jobType].find((r) => r[0] === key);
   if (jobType === "none") {
     $("amount").innerHTML = "404";
+    $("amount").className = "amount";
+    $("grade").className = "grade warn";
     $("grade").textContent = "Dahej not found";
     $("verdict").textContent = "Bhai pehle naukri dhoondo, phir calculator kholna. Papa ka business rishtedaaron ke liye 'kuch nahi karta' hi hai.";
     $("breakup").innerHTML = "";
@@ -262,12 +286,28 @@ function calc() {
   });
   const look = LOOKS[$("looks").value];
   if (look[1]) { const adj = base * look[1]; total += adj; lines.push(`<div><span>${adj > 0 ? "+" : "−"} Rang: ${look[0]} (${Math.abs(look[1] * 100)}%)</span><span>${adj > 0 ? "+" : "−"}₹${Math.abs(adj).toFixed(1)} L</span></div>`); }
+  const ht = HEIGHTS[$("height").value];
+  if (ht[1]) { const adj = base * ht[1]; total += adj; lines.push(`<div><span>${adj > 0 ? "+" : "−"} Height: ${ht[0]} (${Math.abs(ht[1] * 100)}%)</span><span>${adj > 0 ? "+" : "−"}₹${Math.abs(adj).toFixed(1)} L</span></div>`); }
+  const raw = total;
   total = Math.min(100, Math.max(15, total));
   lines.push(`<div><span>Final (15 L – 1 Cr cap)</span><span>₹${total.toFixed(1)} L</span></div>`);
-  $("amount").innerHTML = fmt(total);
-  $("grade").textContent = grade(total);
-  $("verdict").textContent = row[3] + " " + look[2];
+  const waiting = raw < 15;
+  $("amount").innerHTML = waiting ? "WAITING" : fmt(total);
+  $("grade").textContent = waiting ? "Grade D : Abhi koi ladki available nahi hai" : grade(total);
+  $("verdict").textContent = waiting
+    ? WAITING[Math.floor(Math.random() * WAITING.length)]
+    : [row[3], look[2], ht[2]].filter(Boolean).join(" ");
+  $("amount").className = waiting ? "amount waiting" : "amount";
+  $("grade").className = waiting ? "grade warn" : "grade";
   $("breakup").innerHTML = lines.join("");
+
+  if (waiting) {
+    $("fun").innerHTML = `
+      <h4>Aapke liye market ka message</h4>
+      <div class="chips"><span>Rishta: pending</span><span>Bua ji: busy</span><span>Photo: reject</span><span>Biodata: circulate ho raha hai</span></div>
+      <div class="biodata">Sujhav: rate badhane ki koshish mat karo. Jo log ladke ko Excel sheet mein daalte hain, unse rishta na hi ho toh behtar. Apna kaam karo, apni pasand se shaadi karo — ya na karo. 🙏</div>`;
+    return;
+  }
 
   const items = SHAGUN.filter(([min]) => total >= min).flatMap(([, l]) => l);
   const baraat = Math.round(80 + total * 4);

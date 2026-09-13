@@ -73,6 +73,15 @@
   .breakup{ margin-top:16px; text-align:left; font-size:14px; background:#fff; border:2px solid #efd9a8; border-radius:6px; padding:12px 14px }
   .breakup div{ display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px dotted #e6cfa0 }
   .breakup div:last-child{ border:none; font-weight:800; color:var(--maroon) }
+  .fun{ margin-top:14px; text-align:left; font-size:14px }
+  .fun h4{ font-family:'Yatra One',cursive; font-weight:400; color:var(--maroon); font-size:17px; margin:12px 0 8px }
+  .chips{ display:flex; flex-wrap:wrap; gap:6px }
+  .chips span{ background:#fff; border:2px solid #efd9a8; border-radius:20px; padding:5px 11px; font-weight:600; font-size:13px }
+  .stats{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px }
+  .stats div{ background:var(--maroon); color:var(--cream); border-radius:6px; padding:10px; text-align:center }
+  .stats b{ display:block; font-family:'Yatra One',cursive; font-weight:400; font-size:20px; color:var(--marigold) }
+  .stats small{ font-size:12px; opacity:.9 }
+  .biodata{ margin-top:12px; background:#fff; border-left:5px solid var(--marigold); padding:10px 12px; font-size:13.5px; font-style:italic; line-height:1.5 }
   .share{ margin-top:16px; padding:10px 18px; font-family:inherit; font-weight:800; background:#fff; border:2px solid var(--maroon); color:var(--maroon); border-radius:6px; cursor:pointer }
   .disclaimer{
     margin-top:28px; background:var(--maroon); color:var(--cream); padding:16px 18px; border-radius:6px;
@@ -124,6 +133,7 @@
     <div class="grade" id="grade"></div>
     <p class="verdict" id="verdict"></p>
     <div class="breakup" id="breakup"></div>
+    <div class="fun" id="fun"></div>
     <button class="share" id="share" type="button">Result copy karo 📋</button>
   </section>
 
@@ -142,18 +152,31 @@ const RATES = {
     ["ias", "IAS / IPS (UPSC clear)", 100, "Bhai UPSC clear kar liya, ab rishtedaar tumse nahi, tum unse rate poochoge."],
     ["pcs", "PCS / State civil services", 60, "Collector nahi ho par gaadi pe laal batti wala sapna abhi zinda hai."],
     ["bankpo", "Bank PO", 30, "Shaadi mein sabse zyada 'beta bank mein hai' sunne ko milega."],
+    ["lekhpal", "Lekhpal", 50, "Salary 40 hazaar, rate 50 lakh. Rishtedaar 'upar ki kamai' wala column alag se dekhte hain."],
+    ["patwari", "Patwari / Tehsil office", 45, "Zameen ka naksha tumhare haath mein hai. Pura gaon rishta lekar khada hai."],
+    ["babu", "Babu (office clerk)", 28, "File aage badhegi ya nahi, yeh tum decide karte ho. Power hai bhai."],
     ["ssc", "SSC CGL / Central govt clerk", 25, "Pakki naukri, pakka rishta. Sunday ko chhutti bhi milti hai."],
+    ["fauji", "Fauji / Defence", 24, "Poora mohalla salute karta hai, par posting Siachen mein hai."],
     ["railway", "Railway", 20, "Free pass milta hai — sasural wale bhi Goa jaayenge."],
+    ["bijli", "Bijli vibhag", 20, "Mohalle ki light tumhare haath mein. Isse badi izzat kya hogi."],
     ["teacher", "Sarkari teacher", 18, "Garmi ki chhutti 45 din. Bua ji ko yahi chahiye tha."],
-    ["police", "Police constable", 15, "Mohalle mein izzat guaranteed, dahej minimum slab pe."],
+    ["police", "Police constable", 16, "Mohalle mein izzat guaranteed, dahej minimum slab pe."],
+    ["postman", "Postman / Gram panchayat staff", 15, "Sabki chitthi padh chuke ho, sabke rishte ka scene pata hai."],
   ],
   private: [
     ["faang", "FAANG / Big Tech SDE", 80, "Package dekh ke rishtedaar ne calculator band kar diya, ab laptop khola."],
     ["founder", "Startup founder (funded)", 70, "Valuation pe rate lag raha hai. Down round hua toh renegotiation."],
     ["doctor", "Doctor (private hospital)", 60, "'Beta doctor hai' — bas yahi line 60 lakh ki hai."],
     ["consult", "Consultant / Investment banker", 55, "Kaam samajh nahi aata kisi ko, par PPT achhi banate ho."],
+    ["builder", "Property dealer / Builder", 45, "Plot dikhate-dikhate rishta bhi deal ki tarah settle karwa doge."],
+    ["mba", "MBA (tier-1 college)", 35, "Abhi package nahi aaya, sirf offer letter ka screenshot hai. Chalega."],
+    ["ca", "CA / Lawyer (own practice)", 40, "Sasural wale free mein ITR aur case dono karwayenge."],
     ["creator", "YouTuber / Content creator", 22, "Rate views pe depend karta hai. Ek video flop, 5 lakh kam."],
+    ["mr", "Medical representative", 19, "Din bhar bag lekar ghoomte ho, biodata mein 'pharma sector' likh dena."],
     ["it", "Service-based IT (TCS/Infosys/Wipro)", 18, "'Software engineer' bolke 18 lakh, 'support engineer' bolke 15."],
+    ["coaching", "Coaching / Private teacher", 17, "Mohalle ke 40 bachchon ke career tumhare haath mein, phir bhi rate 17."],
+    ["shop", "Dukaan / Family shop", 16, "Cash business hai — rishtedaar income 3x maan ke chalte hain."],
+    ["gym", "Gym trainer", 16, "Body 1 crore ki, rate 16 lakh. Duniya andhi hai bhai."],
     ["startup", "Startup employee (unfunded)", 15, "ESOPs ki value rishtedaar nahi maante, sorry."],
   ],
   none: [
@@ -178,6 +201,24 @@ const AI_LINES = [
   "Salary slip aur baraat ka size cross-check ho raha hai…",
   "Deep learning model 'Pandit ji v2.0' load ho raha hai…",
   "Market sentiment: Shaadi season, demand high…",
+  "Tehsil ke records se 'upar ki kamai' estimate ho rahi hai…",
+  "Mohalle ke 4 aunties ka feedback average kiya ja raha hai…",
+  "Baraat ka budget aur halwai ka quotation match ho raha hai…",
+];
+// Shagun ka saamaan — jitna bada rate, utni lambi list. Sab bakwaas hai.
+const SHAGUN = [
+  [15, ["Godrej almirah", "Sofa set (rexine)", "Double bed", "Pressure cooker", "51 kg mithai"]],
+  [25, ["Fridge (single door)", "Splendor", "Washing machine", "Dinner set", "Sone ki chain"]],
+  [40, ["Scorpio", "LED TV 55 inch", "Sone ka set", "Honeymoon: Manali", "AC 1.5 ton"]],
+  [60, ["Fortuner", "Plot (highway ke paas)", "Honeymoon: Thailand", "Sone ke 2 set", "Full furniture"]],
+  [80, ["Flat (society wala)", "Audi", "Honeymoon: Europe", "Destination wedding", "Blank cheque"]],
+];
+const BIODATA = [
+  "Ladka susheel hai, ghar ka kaam kabhi nahi kiya par susheel hai.",
+  "Ladke ki koi buri aadat nahi hai — sirf Instagram reels 4 ghante.",
+  "Ladka non-smoker, non-drinker, non-cooking, non-cleaning.",
+  "Ladka ghar ka bada beta hai, isliye rate bhi bada hai.",
+  "Ladke ko sirf ek shauk hai — dusron ka rate calculate karna.",
 ];
 const $ = (id) => document.getElementById(id);
 let jobType = null;
@@ -212,6 +253,7 @@ function calc() {
     $("grade").textContent = "Dahej not found";
     $("verdict").textContent = "Bhai pehle naukri dhoondo, phir calculator kholna. Papa ka business rishtedaaron ke liye 'kuch nahi karta' hi hai.";
     $("breakup").innerHTML = "";
+    $("fun").innerHTML = `<div class="biodata">Biodata mein likha hai: "Ladka abhi preparation kar raha hai." Preparation kis cheez ki, yeh 6 saal se koi nahi pooch raha.</div>`;
     return;
   }
   let base = row[2], total = base, lines = [`<div><span>Base rate — ${row[1]}</span><span>₹${base} L</span></div>`];
@@ -226,6 +268,22 @@ function calc() {
   $("grade").textContent = grade(total);
   $("verdict").textContent = row[3] + " " + look[2];
   $("breakup").innerHTML = lines.join("");
+
+  const items = SHAGUN.filter(([min]) => total >= min).flatMap(([, l]) => l);
+  const baraat = Math.round(80 + total * 4);
+  const rishte = Math.max(1, Math.round(total / 4));
+  const mithai = Math.round(21 + total * 1.5);
+  const dhol = total >= 60 ? "DJ + band + ghodi" : total >= 30 ? "Band baaja" : "Bluetooth speaker";
+  $("fun").innerHTML = `
+    <h4>Shagun mein yeh sab bhi maangenge</h4>
+    <div class="chips">${items.map((i) => `<span>${i}</span>`).join("")}</div>
+    <div class="stats">
+      <div><b>${baraat}</b><small>baraati aayenge</small></div>
+      <div><b>${rishte}</b><small>rishte per hafta</small></div>
+      <div><b>${mithai} kg</b><small>mithai ka order</small></div>
+      <div><b>${dhol}</b><small>entry ka intezaam</small></div>
+    </div>
+    <div class="biodata">Biodata line: "${BIODATA[Math.floor(Math.random() * BIODATA.length)]}"</div>`;
 }
 
 $("go").addEventListener("click", async () => {

@@ -1,25 +1,43 @@
 # 💸 AI Powered Dahej Calculator™
 
-> Shaadi market ka Bloomberg terminal. Sarkari ya private, position batao — rate 15 lakh se 1 crore ke beech nikal ke dega.
+> The Bloomberg terminal of the Indian shaadi market. Pick your job, your position, your skin tone — and get your "market rate" between ₹15 lakh and ₹1 crore.
 
-**Yeh satire hai.** Dahej lena aur dena dono crime hai (Dowry Prohibition Act, 1961 — 5 saal tak ki jail). Yeh project us ghatiya soch ka mazaak udaane ke liye bana hai. Isme koi AI nahi hai, sirf ek `if-else` aur thoda sa gussa.
+![Static site](https://img.shields.io/badge/stack-vanilla%20HTML%2FCSS%2FJS-7A1E2B)
+![No build](https://img.shields.io/badge/build-none-D9A441)
+![Satire](https://img.shields.io/badge/type-satire-2E6B3F)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-## Kya karta hai
-- Sarkari / Private / Berozgaar select karo
-- Position choose karo (IAS se lekar TCS tak)
-- Add-ons: IIT tag, apna ghar, foreign posting, gaadi
-- Fake "AI analysis" chalti hai, phir rate + grade + breakup aata hai
-- Berozgaar select kiya toh `404 Dahej not found`
+**This is satire.** Giving or taking dowry is a crime in India under the Dowry Prohibition Act, 1961 (up to 5 years imprisonment). This project exists to make fun of the mindset that treats people like price tags — the job-based "rates", the colourism, the relatives with calculators. There is no AI here. It's an `if-else` and some anger.
 
-## Run
-Single `index.html` hai. Browser mein kholo, ya:
+## What it does
+
+| Input | Options |
+|---|---|
+| Job type | Sarkari (government) · Private · Berozgaar (unemployed) |
+| Position | 7 per category — from IAS (₹1 Cr) to unfunded-startup employee (₹15 L) |
+| Skin tone | Gora / Sanwla / Kariya — the "rate" moves ±10%, and the verdict tells you exactly whose fault that is |
+| Add-ons | IIT/NIT tag +10% · own house +8% · foreign posting +12% · car +5% |
+
+Then a fake "AI analysis" runs (*"Consulting with Bua ji…"*, *"Loading Pandit ji v2.0…"*), and you get an amount, a grade, a roast, and a line-item breakup. Pick *Berozgaar* and you get `404 — Dahej not found`.
+
+The result is capped between ₹15 lakh and ₹1 crore, because that's apparently the market.
+
+## Run locally
+
+It's a single `index.html`. Open it in a browser, or:
 
 ```bash
 npx serve .
 ```
 
-## Deploy (Vercel)
-Repo import karo → framework "Other" → deploy. Koi build step nahi.
+## Deploy
+
+Import the repo on [Vercel](https://vercel.com) → framework preset **Other** → Deploy. No build step.
+
+## Stack
+
+Vanilla HTML, CSS and JavaScript. Google Fonts (Yatra One + Baloo 2). Zero dependencies.
 
 ## License
-MIT. Rishta karo, rate nahi. 🙏
+
+MIT — Made for laughs. Rishta karo, rate nahi. 🙏

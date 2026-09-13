@@ -101,6 +101,13 @@
   <label for="pos">Kaun si position?</label>
   <select id="pos"><option value="">Pehle upar naukri select karo</option></select>
 
+  <label for="looks">Shakal-surat (Bua ji ka favourite sawaal)</label>
+  <select id="looks">
+    <option value="gora">Gora — Fair &amp; Lovely ka ad lagte ho</option>
+    <option value="wheatish" selected>Sanwla — biodata mein "wheatish" likha hai</option>
+    <option value="kariya">Kariya — photo Snapseed se bhi nahi sudhri</option>
+  </select>
+
   <label>Add-ons (Rishtedaar yeh sab pooch hi lenge)</label>
   <div class="extras">
     <label><input type="checkbox" id="x_iit">IIT / NIT ka tag hai</label>
@@ -159,6 +166,11 @@ const EXTRAS = [
   ["x_abroad", "Foreign posting", 0.12],
   ["x_car", "Gaadi", 0.05],
 ];
+const LOOKS = {
+  gora:     ["Gora", 0.10,  "Rang gora hai toh 10% upar. Logic? Koi nahi. Bua ji ka rule hai."],
+  wheatish: ["Sanwla", 0,   "Sanwla = neutral. Biodata mein 'wheatish' likhna mat bhoolna."],
+  kariya:   ["Kariya", -0.10, "Rishtedaar 10% kaat rahe hain. Ghatiya rishtedaar hain, tum nahi. Rang nahi, soch kaali hai unki."],
+};
 const AI_LINES = [
   "Rishtedaaron ka WhatsApp group scan ho raha hai…",
   "Bua ji ke saath consultation chal rahi hai…",
@@ -206,11 +218,13 @@ function calc() {
   EXTRAS.forEach(([id, name, pct]) => {
     if ($(id).checked) { const add = base * pct; total += add; lines.push(`<div><span>+ ${name} (${pct * 100}%)</span><span>₹${add.toFixed(1)} L</span></div>`); }
   });
+  const look = LOOKS[$("looks").value];
+  if (look[1]) { const adj = base * look[1]; total += adj; lines.push(`<div><span>${adj > 0 ? "+" : "−"} Rang: ${look[0]} (${Math.abs(look[1] * 100)}%)</span><span>${adj > 0 ? "+" : "−"}₹${Math.abs(adj).toFixed(1)} L</span></div>`); }
   total = Math.min(100, Math.max(15, total));
   lines.push(`<div><span>Final (15 L – 1 Cr cap)</span><span>₹${total.toFixed(1)} L</span></div>`);
   $("amount").innerHTML = fmt(total);
   $("grade").textContent = grade(total);
-  $("verdict").textContent = row[3];
+  $("verdict").textContent = row[3] + " " + look[2];
   $("breakup").innerHTML = lines.join("");
 }
 

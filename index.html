@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Powered Dahej Calculator™ — Shaadi Market ka Bloomberg</title>
+<meta name="description" content="Satire project. Dahej lena-dena crime hai. Yeh sirf mazaak hai.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon:#7A1E2B; --maroon-deep:#4A0F18; --gold:#D9A441; --marigold:#F2A93B;
+    --cream:#FFF3DC; --ink:#2B0A10; --leaf:#2E6B3F;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Baloo 2',sans-serif; color:var(--ink); min-height:100vh;
+    background:var(--maroon-deep);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(242,169,59,.18), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(217,164,65,.14), transparent 40%),
+      repeating-linear-gradient(45deg, transparent 0 18px, rgba(255,255,255,.025) 18px 20px);
+    display:flex; align-items:center; justify-content:center; padding:32px 16px;
+  }
+  .card{
+    width:100%; max-width:560px; background:var(--cream);
+    border:3px solid var(--gold); outline:10px solid var(--maroon); outline-offset:6px;
+    padding:36px 32px 28px; position:relative; box-shadow:0 30px 60px rgba(0,0,0,.45);
+  }
+  .card::before,.card::after{
+    content:"❋"; position:absolute; color:var(--gold); font-size:28px; top:8px;
+  }
+  .card::before{left:12px} .card::after{right:12px}
+  .ganesh{ text-align:center; font-size:14px; color:var(--maroon); letter-spacing:1px; margin-bottom:6px}
+  h1{
+    font-family:'Yatra One',cursive; font-weight:400; font-size:clamp(28px,6vw,40px);
+    line-height:1.1; color:var(--maroon); text-align:center;
+  }
+  .tag{ text-align:center; font-size:15px; color:#6b3a42; margin:8px 0 24px; font-weight:600}
+  .tag span{ background:var(--marigold); color:var(--ink); padding:2px 8px; border-radius:4px; font-size:12px; font-weight:800; margin-left:6px}
+  label{ display:block; font-weight:800; font-size:15px; margin:18px 0 8px; color:var(--maroon)}
+  .seg{ display:flex; gap:8px }
+  .seg button{
+    flex:1; padding:12px; font-family:inherit; font-weight:800; font-size:15px; cursor:pointer;
+    background:#fff; border:2px solid var(--gold); color:var(--maroon); border-radius:6px; transition:.15s;
+  }
+  .seg button.on{ background:var(--maroon); color:var(--cream); border-color:var(--maroon)}
+  .seg button:focus-visible, select:focus-visible, .go:focus-visible{ outline:3px solid var(--marigold); outline-offset:2px}
+  select{
+    width:100%; padding:12px; font-family:inherit; font-size:15px; font-weight:600;
+    border:2px solid var(--gold); border-radius:6px; background:#fff; color:var(--ink);
+  }
+  .extras{ display:grid; grid-template-columns:1fr 1fr; gap:8px }
+  .extras label{ margin:0; font-size:14px; font-weight:600; display:flex; gap:8px; align-items:center;
+    background:#fff; padding:10px; border:2px solid #efd9a8; border-radius:6px; cursor:pointer; color:var(--ink)}
+  .extras input{ accent-color:var(--maroon); width:16px; height:16px }
+  .go{
+    width:100%; margin-top:26px; padding:16px; font-family:'Yatra One',cursive; font-size:22px;
+    background:var(--marigold); color:var(--ink); border:none; border-radius:6px; cursor:pointer;
+    box-shadow:0 6px 0 #b7761a; transition:transform .08s;
+  }
+  .go:active{ transform:translateY(4px); box-shadow:0 2px 0 #b7761a }
+  .go:disabled{ opacity:.6; cursor:wait }
+  .ai{ margin-top:22px; font-size:14px; font-weight:600; color:#6b3a42; min-height:22px; text-align:center }
+  .ai::before{ content:"🤖 "; }
+  .result{ display:none; margin-top:24px; border-top:2px dashed var(--gold); padding-top:22px; text-align:center }
+  .result.show{ display:block; animation:pop .35s ease-out }
+  @keyframes pop{ from{ transform:scale(.92); opacity:0 } to{ transform:scale(1); opacity:1 } }
+  .amount{ font-family:'Yatra One',cursive; font-size:clamp(40px,10vw,64px); color:var(--maroon); line-height:1 }
+  .rupee{ font-size:.55em; vertical-align:top; color:var(--gold) }
+  .grade{ display:inline-block; margin-top:10px; background:var(--leaf); color:#fff; padding:4px 14px; border-radius:20px; font-weight:800; font-size:14px }
+  .verdict{ margin-top:14px; font-size:16px; line-height:1.5; color:var(--ink) }
+  .breakup{ margin-top:16px; text-align:left; font-size:14px; background:#fff; border:2px solid #efd9a8; border-radius:6px; padding:12px 14px }
+  .breakup div{ display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px dotted #e6cfa0 }
+  .breakup div:last-child{ border:none; font-weight:800; color:var(--maroon) }
+  .share{ margin-top:16px; padding:10px 18px; font-family:inherit; font-weight:800; background:#fff; border:2px solid var(--maroon); color:var(--maroon); border-radius:6px; cursor:pointer }
+  .disclaimer{
+    margin-top:28px; background:var(--maroon); color:var(--cream); padding:16px 18px; border-radius:6px;
+    font-size:13.5px; line-height:1.55;
+  }
+  .disclaimer strong{ color:var(--marigold); display:block; font-size:15px; margin-bottom:4px }
+  .foot{ text-align:center; margin-top:16px; font-size:12px; color:#8a5a62 }
+  .foot a{ color:var(--maroon); font-weight:800; text-decoration:none }
+  @media (prefers-reduced-motion:reduce){ .result.show{ animation:none } }
+  @media (max-width:420px){ .card{ padding:28px 18px 22px; outline-width:6px } .extras{ grid-template-columns:1fr } }
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="ganesh">॥ श्री गणेशाय नमः ॥</div>
+  <h1>AI Powered Dahej Calculator™</h1>
+  <p class="tag">Shaadi market ka Bloomberg terminal <span>BETA</span></p>
+
+  <label>Apni naukri batao</label>
+  <div class="seg" id="jobType">
+    <button data-v="govt" type="button">🏛️ Sarkari</button>
+    <button data-v="private" type="button">💼 Private</button>
+    <button data-v="none" type="button">🛋️ Berozgaar</button>
+  </div>
+
+  <label for="pos">Kaun si position?</label>
+  <select id="pos"><option value="">Pehle upar naukri select karo</option></select>
+
+  <label>Add-ons (Rishtedaar yeh sab pooch hi lenge)</label>
+  <div class="extras">
+    <label><input type="checkbox" id="x_iit">IIT / NIT ka tag hai</label>
+    <label><input type="checkbox" id="x_house">Apna ghar hai (rent nahi)</label>
+    <label><input type="checkbox" id="x_abroad">Foreign posting / onsite</label>
+    <label><input type="checkbox" id="x_car">Gaadi hai (Activa count nahi hoti)</label>
+  </div>
+
+  <button class="go" id="go" type="button">Rate nikaalo 💸</button>
+  <div class="ai" id="ai"></div>
+
+  <section class="result" id="result" aria-live="polite">
+    <div class="amount" id="amount"></div>
+    <div class="grade" id="grade"></div>
+    <p class="verdict" id="verdict"></p>
+    <div class="breakup" id="breakup"></div>
+    <button class="share" id="share" type="button">Result copy karo 📋</button>
+  </section>
+
+  <div class="disclaimer">
+    <strong>⚠️ Zaroori baat — yeh sirf mazaak hai</strong>
+    Dahej lena aur dena dono <b>crime</b> hai — Dowry Prohibition Act, 1961 ke under 5 saal tak ki jail aur jurmaana.
+    Yeh calculator ek satire project hai jo is ghatiya soch ka mazaak udaata hai. Isme koi "AI" nahi hai, sirf ek
+    if-else hai aur thoda sa gussa. Rishta karo, rate nahi. 🙏
+  </div>
+  <p class="foot">Built for fun by <a href="https://github.com/prakhar1605" target="_blank" rel="noopener">Prakhar</a> · Kisi ne serious liya toh wo problem unki hai</p>
+</main>
+<script>
+// Rate card (in lakh). Range: 15 lakh -> 1 crore. Purely bakwaas, purely satire.
+const RATES = {
+  govt: [
+    ["ias", "IAS / IPS (UPSC clear)", 100, "Bhai UPSC clear kar liya, ab rishtedaar tumse nahi, tum unse rate poochoge."],
+    ["pcs", "PCS / State civil services", 60, "Collector nahi ho par gaadi pe laal batti wala sapna abhi zinda hai."],
+    ["bankpo", "Bank PO", 30, "Shaadi mein sabse zyada 'beta bank mein hai' sunne ko milega."],
+    ["ssc", "SSC CGL / Central govt clerk", 25, "Pakki naukri, pakka rishta. Sunday ko chhutti bhi milti hai."],
+    ["railway", "Railway", 20, "Free pass milta hai — sasural wale bhi Goa jaayenge."],
+    ["teacher", "Sarkari teacher", 18, "Garmi ki chhutti 45 din. Bua ji ko yahi chahiye tha."],
+    ["police", "Police constable", 15, "Mohalle mein izzat guaranteed, dahej minimum slab pe."],
+  ],
+  private: [
+    ["faang", "FAANG / Big Tech SDE", 80, "Package dekh ke rishtedaar ne calculator band kar diya, ab laptop khola."],
+    ["founder", "Startup founder (funded)", 70, "Valuation pe rate lag raha hai. Down round hua toh renegotiation."],
+    ["doctor", "Doctor (private hospital)", 60, "'Beta doctor hai' — bas yahi line 60 lakh ki hai."],
+    ["consult", "Consultant / Investment banker", 55, "Kaam samajh nahi aata kisi ko, par PPT achhi banate ho."],
+    ["creator", "YouTuber / Content creator", 22, "Rate views pe depend karta hai. Ek video flop, 5 lakh kam."],
+    ["it", "Service-based IT (TCS/Infosys/Wipro)", 18, "'Software engineer' bolke 18 lakh, 'support engineer' bolke 15."],
+    ["startup", "Startup employee (unfunded)", 15, "ESOPs ki value rishtedaar nahi maante, sorry."],
+  ],
+  none: [
+    ["none", "Abhi kuch nahi, papa ka business dekhte hain", 0, ""],
+  ],
+};
+const EXTRAS = [
+  ["x_iit", "IIT / NIT tag", 0.10],
+  ["x_house", "Apna ghar", 0.08],
+  ["x_abroad", "Foreign posting", 0.12],
+  ["x_car", "Gaadi", 0.05],
+];
+const AI_LINES = [
+  "Rishtedaaron ka WhatsApp group scan ho raha hai…",
+  "Bua ji ke saath consultation chal rahi hai…",
+  "LinkedIn profile ko biodata mein convert kiya ja raha hai…",
+  "Salary slip aur baraat ka size cross-check ho raha hai…",
+  "Deep learning model 'Pandit ji v2.0' load ho raha hai…",
+  "Market sentiment: Shaadi season, demand high…",
+];
+const $ = (id) => document.getElementById(id);
+let jobType = null;
+
+document.querySelectorAll("#jobType button").forEach((b) => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("#jobType button").forEach((x) => x.classList.remove("on"));
+    b.classList.add("on");
+    jobType = b.dataset.v;
+    $("pos").innerHTML = RATES[jobType].map(([k, n]) => `<option value="${k}">${n}</option>`).join("");
+    $("result").classList.remove("show");
+    $("ai").textContent = "";
+  });
+});
+
+const fmt = (lakh) => lakh >= 100
+  ? `<span class="rupee">₹</span>${(lakh / 100).toFixed(lakh % 100 ? 2 : 0)} Cr`
+  : `<span class="rupee">₹</span>${Math.round(lakh)} Lakh`;
+
+function grade(l) {
+  if (l >= 90) return "Grade A+ : Bua ji khud rishta laayengi";
+  if (l >= 50) return "Grade A : Premium listing";
+  if (l >= 25) return "Grade B : Standard package";
+  return "Grade C : Entry level, negotiate karlo";
+}
+
+function calc() {
+  const key = $("pos").value;
+  const row = RATES[jobType].find((r) => r[0] === key);
+  if (jobType === "none") {
+    $("amount").innerHTML = "404";
+    $("grade").textContent = "Dahej not found";
+    $("verdict").textContent = "Bhai pehle naukri dhoondo, phir calculator kholna. Papa ka business rishtedaaron ke liye 'kuch nahi karta' hi hai.";
+    $("breakup").innerHTML = "";
+    return;
+  }
+  let base = row[2], total = base, lines = [`<div><span>Base rate — ${row[1]}</span><span>₹${base} L</span></div>`];
+  EXTRAS.forEach(([id, name, pct]) => {
+    if ($(id).checked) { const add = base * pct; total += add; lines.push(`<div><span>+ ${name} (${pct * 100}%)</span><span>₹${add.toFixed(1)} L</span></div>`); }
+  });
+  total = Math.min(100, Math.max(15, total));
+  lines.push(`<div><span>Final (15 L – 1 Cr cap)</span><span>₹${total.toFixed(1)} L</span></div>`);
+  $("amount").innerHTML = fmt(total);
+  $("grade").textContent = grade(total);
+  $("verdict").textContent = row[3];
+  $("breakup").innerHTML = lines.join("");
+}
+
+$("go").addEventListener("click", async () => {
+  if (!jobType) { $("ai").textContent = "Pehle naukri toh select karo bhai."; return; }
+  const go = $("go"), ai = $("ai");
+  go.disabled = true; $("result").classList.remove("show");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const picks = [...AI_LINES].sort(() => Math.random() - .5).slice(0, reduced ? 1 : 3);
+  for (const line of picks) { ai.textContent = line; await new Promise((r) => setTimeout(r, reduced ? 200 : 700)); }
+  ai.textContent = "Analysis complete. Pandit ji ne approve kar diya.";
+  calc();
+  $("result").classList.add("show");
+  go.disabled = false;
+});
+
+$("share").addEventListener("click", async () => {
+  const text = `AI Powered Dahej Calculator™ ne mera rate nikala: ${$("amount").innerText} — ${$("grade").innerText}. ` +
+    `(Satire hai, dahej lena-dena crime hai) ${location.href}`;
+  try { await navigator.clipboard.writeText(text); $("share").textContent = "Copy ho gaya ✅"; }
+  catch { $("share").textContent = "Copy nahi hua, manually kar lo"; }
+  setTimeout(() => ($("share").textContent = "Result copy karo 📋"), 2000);
+});
+</script>
+</body>
+</html>

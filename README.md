@@ -48,4 +48,4 @@ Vanilla HTML, CSS and JavaScript. Google Fonts (Yatra One + Baloo 2). Zero depen
 
 ## License
 
-MIT — Made for laughs. Rishta karo, rate nahi. 🙏
+MIT — Made for laughs by [@PRAKHARPANDEY31](https://x.com/PRAKHARPANDEY31). Rishta karo, rate nahi. 🙏
